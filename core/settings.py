@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -78,7 +80,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'app',
+        'NAME': 'shop_db',
         'USER': 'postgres',
         'PASSWORD': '2424',
         'HOST': 'localhost',
