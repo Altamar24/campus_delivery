@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'shop.apps.ShopConfig',
+    'accounts',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,4 +132,6 @@ LOGIN_URL = 'login'
 
 LOGIN_REDIRECT_URL = 'index'
 
-#AUTH_USER_MODEL = 'accounts.User'
+#User
+
+AUTH_USER_MODEL ='accounts.User'
