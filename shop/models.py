@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+from accounts.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=150, db_index=True,
@@ -44,3 +45,14 @@ class Product(models.Model):
 
     def get_absolute_url(self):
             return reverse('shop:product_detail', args=[self.id, self.slug])
+    
+
+class Basket(models.Model):
+     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+     product = models.ForeignKey(to=Product, on_delete=models.CASCADE)
+     quantity = models.PositiveSmallIntegerField(default=0)
+     created_timestamp = models.DateTimeField(auto_now_add=True)
+
+     def __str__(self):
+          return f'Корзина для {self.user.email} | Продукт: {self.product.name}' 
+     
