@@ -31,6 +31,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True, verbose_name='Наличие')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    quantity = models.PositiveIntegerField(default=1, verbose_name='Количество')
 
     class Meta:
         ordering = ('name',)

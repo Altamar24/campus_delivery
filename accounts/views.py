@@ -1,4 +1,4 @@
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
@@ -25,8 +25,14 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Вы успешно зарегестрированы!')
             return HttpResponseRedirect(reverse('accounts:login'))
     else:
         form = UserRegistrationForm()
     context = {'form': form}
     return render(request, 'accounts/registration.html', context)
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('shop:index'))
