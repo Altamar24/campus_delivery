@@ -3,6 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
 from accounts.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from shop.models import Basket
 
 def login(request):
     if request.method == 'POST':
@@ -48,5 +49,17 @@ def profile (request):
             print(form.errors)
     else:
         form = UserProfileForm(instance=request.user)
-    context = {'form': form}
+
+    baskets = Basket.objects.filter(user=request.user)
+    total_sum = 0
+    total_quantity = 0
+    for basket in baskets:
+        total_sum += basket.sum()
+        total_quantity += basket.quantity
+
+    context = {'form': form,
+               'baskets': baskets,
+               'total_sum': total_sum, 
+               'total_quantity': total_quantity, 
+            }
     return render (request, 'accounts/profile.html', context)
