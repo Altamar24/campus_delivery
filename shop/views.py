@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+
 
 from .models import Category, Product, Basket
 
@@ -8,15 +10,18 @@ def index(request):
     return render(request, "shop/index.html")
 
 
-def product_list(request, category_slug=None):
-    category = None
-    categories = Category.objects.all()
-    products = Product.objects.filter(available=True)
-    if category_slug:
-        category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
-    context = {'category': category,
-               'categories': categories, 'products': products}
+def product_list(request, category_id=None, page_number=1):
+    products = Product.objects.filter(
+        category_id=category_id) if category_id else Product.objects.all()
+    
+    per_page = 3
+    paginator = Paginator(products, per_page)
+    products_paginator = paginator.page(page_number)
+
+    context = {
+        'categories': Category.objects.all(),
+        'products': products_paginator,
+    }
     return render(request, 'shop/products.html', context)
 
 
