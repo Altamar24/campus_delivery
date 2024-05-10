@@ -1,16 +1,21 @@
 from django.contrib import admin
-from .models import Category, Product
 
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
-    prepopulated_fields = {'slug': ('name',)}
+from .models import Category, Product, Basket
 
-admin.site.register(Category, CategoryAdmin)
 
+admin.site.register(Category)
+
+
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'price', 'available', 'created', 'updated']
-    list_filter = ['available', 'created', 'updated']
-    list_editable = ['price', 'available']
-    prepopulated_fields = {'slug': ('name',)}
+    list_display = ('name', 'price', 'quantity', 'category')
+    fields = ('image', 'name', 'description', ('price', 'quantity'), 'category', 'available')
+    readonly_fields = ('description',)
+    search_fields = ('name',)
+    ordering = ('name',)
 
-admin.site.register(Product, ProductAdmin)
+
+class BasketAdmin(admin.TabularInline):
+    model = Basket
+    fields = ('product', 'quantity')
+    extra = 0

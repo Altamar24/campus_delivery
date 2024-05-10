@@ -132,6 +132,10 @@ LOGIN_URL = '/accounts/login/'
 
 LOGIN_REDIRECT_URL = 'index'
 
-#User
+# User
 
 AUTH_USER_MODEL ='accounts.User'
+
+# Sending email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
