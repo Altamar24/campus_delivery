@@ -43,7 +43,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li>
-                            <a class="dropdown-item" href="{% url 'accounts:profile' %}">Профиль</a>
+                            <a class="dropdown-item" href="{% url 'accounts:profile' user.id%}">Профиль</a>
                         </li>
                         <li><a class="dropdown-item" href="#">Заказы</a></li>
                         <li><a class="dropdown-item" href="#">Админ-панель</a></li>
