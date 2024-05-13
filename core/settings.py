@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DOMAIN_NAME = 'http://localhost:8000'
+
 
 # Application definition
 
@@ -135,8 +137,20 @@ LOGIN_REDIRECT_URL = '/'
 
 # User
 
-AUTH_USER_MODEL ='accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Sending email
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.yandex.ru'
+
+EMAIL_PORT = 465
+
+EMAIL_HOST_USER = 'bisultanoff.magomed@yandex.ru'
+
+EMAIL_HOST_PASSWORD = '8wJU9u'
+
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth, messages
 from django.contrib.auth.views import LoginView
+from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
-from accounts.models import User
+from accounts.models import User, EmailVerification
 from accounts.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from shop.models import Basket
+
 
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
@@ -36,6 +39,19 @@ class UserProfileView(UpdateView):
         return context
 
 
+class EmailVerificationView(TemplateView):
+    template_name = 'accounts/email_verification.html'
+
+    def get(self, request, *args, **kwargs):
+        code = kwargs['code']
+        user = User.objects.get(email=kwargs['email'])
+        email_verifications = EmailVerification.objects.filter(user=user, code=code)
+        if email_verifications.exists() and not email_verifications.first().is_expired():
+            user.is_verified_email = True
+            user.save()
+            return super(EmailVerificationView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse('index'))
 
 def logout(request):
     auth.logout(request)
