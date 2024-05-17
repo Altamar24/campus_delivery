@@ -1,34 +1,32 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 
 
 from .models import Category, Product, Basket
 
 
-def index(request):
-    return render(request, "shop/index.html")
+class IndexView(TemplateView):
+    template_name = "shop/index.html"
 
 
-def product_list(request, category_id=None, page_number=1):
-    products = Product.objects.filter(
-        category_id=category_id) if category_id else Product.objects.all()
-    
-    per_page = 3
-    paginator = Paginator(products, per_page)
-    products_paginator = paginator.page(page_number)
+class ProductsListView(ListView):
+    model = Product
+    template_name = 'shop/products.html'
+    paginate_by = 3
 
-    context = {
-        'categories': Category.objects.all(),
-        'products': products_paginator,
-    }
-    return render(request, 'shop/products.html', context)
+    def get_queryset(self):
+        queryset = super(ProductsListView, self).get_queryset()
+        category_id = self.kwargs.get('category_id')
+        return queryset.filter(category_id=category_id) if category_id else queryset
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductsListView, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        return context
 
-def product_detail(request, id, slug):
-    product = get_object_or_404(Product, id=id, slug=slug, available=True)
-    context = {'product': product}
-    return render(request, 'shop/detail.html', context)
 
 
 @login_required
